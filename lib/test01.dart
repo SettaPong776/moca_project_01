@@ -141,7 +141,7 @@ class _CodiaPage01 extends State<CodiaPage01> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Expanded(
-                                  child: Container(
+                                  child: SizedBox(
                                     width: double.infinity,
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.start,
@@ -149,7 +149,7 @@ class _CodiaPage01 extends State<CodiaPage01> {
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
                                         Expanded(
-                                          child: Container(
+                                          child: SizedBox(
                                             width: double.infinity,
                                             child: const Row(
                                               mainAxisAlignment: MainAxisAlignment.start,
@@ -223,7 +223,7 @@ class _CodiaPage01 extends State<CodiaPage01> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Expanded(
-                                  child: Container(
+                                  child: SizedBox(
                                     width: double.infinity,
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.start,
@@ -231,7 +231,7 @@ class _CodiaPage01 extends State<CodiaPage01> {
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
                                         Expanded(
-                                          child: Container(
+                                          child: SizedBox(
                                             width: double.infinity,
                                             child: const Row(
                                               mainAxisAlignment: MainAxisAlignment.start,
@@ -305,7 +305,7 @@ class _CodiaPage01 extends State<CodiaPage01> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Expanded(
-                                  child: Container(
+                                  child: SizedBox(
                                     width: double.infinity,
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.start,
@@ -313,7 +313,7 @@ class _CodiaPage01 extends State<CodiaPage01> {
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
                                         Expanded(
-                                          child: Container(
+                                          child: SizedBox(
                                             width: double.infinity,
                                             child: const Row(
                                               mainAxisAlignment: MainAxisAlignment.start,
@@ -389,7 +389,7 @@ class _CodiaPage01 extends State<CodiaPage01> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Expanded(
-                                  child: Container(
+                                  child: SizedBox(
                                     width: double.infinity,
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.start,
@@ -397,7 +397,7 @@ class _CodiaPage01 extends State<CodiaPage01> {
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
                                         Expanded(
-                                          child: Container(
+                                          child: SizedBox(
                                             width: double.infinity,
                                             child: const Row(
                                               mainAxisAlignment: MainAxisAlignment.start,
@@ -450,7 +450,7 @@ class _CodiaPage01 extends State<CodiaPage01> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Expanded(
-                        child: Container(
+                        child: SizedBox(
                           width: double.infinity,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -458,7 +458,7 @@ class _CodiaPage01 extends State<CodiaPage01> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Expanded(
-                                child: Container(
+                                child: SizedBox(
                                   width: double.infinity,
                                   child: const Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
@@ -641,7 +641,7 @@ class _CodiaPage01 extends State<CodiaPage01> {
                       decoration: BoxDecoration(
                         color: const Color(0xffb217af),
                         borderRadius: BorderRadius.circular(19),
-                        boxShadow: const [BoxShadow(color: const Color(0x3f000000), offset: Offset(0, 15), blurRadius: 23),],
+                        boxShadow: const [BoxShadow(color: Color(0x3f000000), offset: Offset(0, 15), blurRadius: 23),],
                       ),
                     ),
                   ),

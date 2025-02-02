@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:codia_demo_flutter/codia_page.dart';
 
+
 class CodiaPage16 extends StatefulWidget {
   const CodiaPage16({super.key});
 
@@ -12,207 +13,176 @@ class _CodiaPageState16 extends State<CodiaPage16> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Container(
-          width: 1366,
-          height: 1024,
-          decoration: const BoxDecoration(
-            color: Color(0xffe5f5f8), // พื้นหลังสีฟ้าอ่อน
+      body: Container(
+        width: 1366,
+        height: 1024,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xff14967f), Color(0xffe5f5f8)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
-          child: Stack(
-            children: [
-              // Header Section
-              Positioned(
-                top: 0,
-                child: Container(
-                  width: 1366,
-                  height: 100,
-                  color: const Color(0xff095d7e),
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
+        ),
+        child: Stack(
+          children: [
+            // Header
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                height: 120,
+                color: const Color(0xff14967f),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
                         children: [
-                          Image.asset(
-                            'images/image_317526.png',
-                            width: 60,
-                            height: 60,
-                          ),
+                          Image.asset('images/image2_3171333.png', width: 100, height: 160),
                           const SizedBox(width: 16),
                           const Text(
-                            'MoCA Check Assessment',
+                            'MoCA Check \nAssessment',
                             style: TextStyle(
-                              fontSize: 28,
+                              fontSize: 35,
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         ],
                       ),
-                      ElevatedButton(
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xffe94242),
+                          backgroundColor: Colors.red,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(15),
                           ),
                         ),
                         onPressed: () {
-                          Navigator.push(
+                          Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(
-                              builder: (context) => const CodiaPage(),
-                            ),
+                            MaterialPageRoute(builder: (context) => const CodiaPage()),
                           );
                         },
-                        child: const Text(
-                          'ออก',
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.white,
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                          child: Text(
+                            'ออก',
+                            style: TextStyle(fontSize: 24, color: Colors.white),
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-
-              // Main Content Section
-              Positioned(
-                top: 120,
-                left: 80,
-                right: 80,
-                child: Container(
-                  padding: const EdgeInsets.all(32),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(28),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        'ผลการประเมิน',
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-
-                      // วงกลมและข้อความ
-                      GridView.builder(
-                        shrinkWrap: true,
-                        itemCount: 9,
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          crossAxisSpacing: 24,
-                          mainAxisSpacing: 24,
-                        ),
-                        itemBuilder: (context, index) {
-                          return _buildCircleWidget('Lorem Ipsum', '00.00 %');
-                        },
-                      ),
-                      const SizedBox(height: 20),
-
-                      // Total
-                      const Text(
-                        'Total 00.00 %',
-                        style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      const Text(
-                        'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
+            ),
+            
+            // Main Content Box
+            Positioned(
+              top: 150,
+              left: 50,
+              right: 50,
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black26,
+                      offset: Offset(0, 4),
+                      blurRadius: 10,
+                    ),
+                  ],
                 ),
-              ),
-
-              // Footer Section
-              Positioned(
-                bottom: 0,
-                child: Container(
-                  width: 1366,
-                  height: 80,
-                  decoration: const BoxDecoration(
-                    color: Color(0xff14967f),
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: 64),
-                  child: Center(
-                    child: ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 24,
-                          vertical: 12,
-                        ),
-                      ),
-                      onPressed: () {
-                        // พิมพ์ผลประเมิน
-                      },
-                      icon: const Icon(Icons.print, color: Color(0xff14967f)),
-                      label: const Text(
-                        'พิมพ์ผลประเมิน',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Color(0xff14967f),
-                        ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(
+                      'ผลการประเมิน',
+                      style: TextStyle(
+                        fontSize: 36,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
+                    const SizedBox(height: 20),
+                    GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 4,
+                        crossAxisSpacing: 20,
+                        mainAxisSpacing: 20,
+                        childAspectRatio: 1,
+                      ),
+                      itemCount: 8,
+                      itemBuilder: (context, index) {
+                        return Column(
+                          children: [
+                            Container(
+                              width: 100,
+                              height: 100,
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                            Image.asset('images/image_128.png', width: 130, height: 100),
+                            const SizedBox(height: 10),
+                            const Text('Lorem Ipsum', style: TextStyle(fontSize: 18)),
+                            const Text('00.00 %',
+                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                          ],
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 30),
+                    const Text(
+                      'Total 00.00 %',
+                      style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 10),
+                    const Text(
+                      'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
+                      style: TextStyle(fontSize: 16),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            // Footer Button
+            Positioned(
+              bottom: 20,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xff14967f),
+                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                  ),
+                  onPressed: () {},
+                  icon: const Icon(Icons.print, color: Colors.white),
+                  label: const Text(
+                    'พิมพ์ผลประเมิน',
+                    style: TextStyle(fontSize: 24, color: Colors.white),
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
-    );
-  }
-
-  // Widget สำหรับวงกลมและข้อความ
-  Widget _buildCircleWidget(String title, String percentage) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          width: 80,
-          height: 80,
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            color: Color(0xffd9d9d9), // สีวงกลมเทาอ่อน
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          title,
-          style: const TextStyle(fontSize: 16, color: Colors.black),
-          textAlign: TextAlign.center,
-        ),
-        Text(
-          percentage,
-          style: const TextStyle(
-            fontSize: 16,
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ],
     );
   }
 }

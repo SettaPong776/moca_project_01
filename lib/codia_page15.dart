@@ -226,7 +226,7 @@ class _CodiaPageState15 extends State<CodiaPage15> {
     return TextField(
       decoration: InputDecoration(
         labelText: 'วันที่',
-        suffixIcon: Icon(Icons.calendar_today),
+        suffixIcon: const Icon(Icons.calendar_today),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
       ),
     );

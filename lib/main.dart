@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      home: CodiaPage16(), // ใช้ CodiaPage เป็นหน้าแรกเสมอ
+      home: const CodiaPage16(), // ใช้ CodiaPage เป็นหน้าแรกเสมอ
     );
   }
 }
