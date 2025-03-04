@@ -1,6 +1,6 @@
 import 'dart:math'; // สำหรับการสุ่มคำถาม
 import 'package:codia_demo_flutter/codia_page.dart';
-import 'package:codia_demo_flutter/codia_page08.dart';
+import 'package:codia_demo_flutter/codia_page15.dart';
 import 'package:flutter/material.dart';
 
 class CodiaPage18 extends StatefulWidget {
@@ -287,7 +287,7 @@ class _CodiaPageState18CodiaPage18 extends State<CodiaPage18> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const CodiaPage08(), // หน้าถัดไป (CodiaPage08)
+              builder: (context) => const CodiaPage15(), // หน้าถัดไป (CodiaPage08)
             ),
           );
         }

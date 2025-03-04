@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:codia_demo_flutter/codia_page.dart';
 import 'package:codia_demo_flutter/codia_page07.dart';
+import 'package:collection/collection.dart';
 
 class CodiaPage06 extends StatefulWidget {
   const CodiaPage06({super.key});
@@ -10,6 +11,12 @@ class CodiaPage06 extends StatefulWidget {
 }
 
 class _CodiaPageState06 extends State<CodiaPage06> {
+  List<String> selectedWords = []; // ตัวแปรเก็บคำที่ผู้ใช้เลือก
+  String feedbackMessage = ''; // ตัวแปรเก็บข้อความแสดงผล
+
+  // คำตอบที่ถูกต้อง
+  final List<String> correctAnswers = ['หน้า', 'ผ้าไหม', 'วัด', 'มะลิ', 'สีแดง'];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,61 +104,64 @@ class _CodiaPageState06 extends State<CodiaPage06> {
                   ),
                   child: Column(
                     children: [
-                      // Buttons
                       ElevatedButton.icon(
-                      onPressed: () {
-                        // Action for "ฟังเสียงคำอ่าน"
-                      },
-                      icon: const Icon(Icons.volume_up),
-                      label: const Text(
-                        'ฟังเสียงคำอ่าน',
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                        onPressed: () {
+                          // Action for "ฟังเสียงคำอ่าน"
+                        },
+                        icon: const Icon(Icons.volume_up),
+                        label: const Text(
+                          'ฟังเสียงคำอ่าน',
+                          style: TextStyle(fontSize: 20),
                         ),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 10),
-                      ),
-                    ),
-                      const SizedBox(height: 30),
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          _buildCategoryLabel('หน้า'),
-                          _buildCategoryLabel('ผ้าไหม'),
-                          _buildCategoryLabel('วัด'),
-                          _buildCategoryLabel('มะลิ'),
-                          _buildCategoryLabel('สีแดง'),
-                        ],
-                      ),
-                       const SizedBox(height: 60),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: List.generate(
-                              4,
-                              (index) => _buildAnimalButton(['หน้า', 'ผ้าไหม', 'วัด', 'มะลิ'][index]),
-                            ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
                           ),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
+                        ),
+                      ),
                       
+                      const SizedBox(height: 30),
+                          Positioned(
+                bottom: 80,
+                left: 64,
+                child: Text(
+                  ' ${selectedWords.join('       ')}', // แสดงคำที่เลือกโดยใช้การเว้นวรรค
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+                      const SizedBox(height: 60),
+                           // Display selected words
+          
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: List.generate(
+                          4,
+                          (index) => _buildAnimalButton(['หน้า', 'ผ้าไหม', 'วัด', 'มะลิ'][index]),
+                        ),
+                      ),
                       const SizedBox(height: 16),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: List.generate(
-                              4,
-                              (index) => _buildAnimalButton(['สีแดง', 'เสือ', 'บ้าน', 'หนังสือ'][index]),
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: List.generate(
-                              4,
-                              (index) => _buildAnimalButton(['ทีวี', 'ตา', 'สีเหลือง', 'วิทยุ'][index]),
-                            ),
-                          ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: List.generate(
+                          4,
+                          (index) => _buildAnimalButton(['สีแดง', 'เสือ', 'บ้าน', 'หนังสือ'][index]),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: List.generate(
+                          4,
+                          (index) => _buildAnimalButton(['ทีวี', 'ตา', 'สีเหลือง', 'วิทยุ'][index]),
+                        ),
+                      ),
                       const SizedBox(height: 30),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
@@ -163,7 +173,11 @@ class _CodiaPageState06 extends State<CodiaPage06> {
                               horizontal: 50, vertical: 16),
                         ),
                         onPressed: () {
-                          // Action for the delete button
+                          setState(() {
+                            if (selectedWords.isNotEmpty) {
+                              selectedWords.removeLast(); // ลบคำสุดท้ายในลิสต์
+                            }
+                          });
                         },
                         child: const Text(
                           'ลบ',
@@ -171,6 +185,22 @@ class _CodiaPageState06 extends State<CodiaPage06> {
                         ),
                       ),
                     ],
+                  ),
+                ),
+              ),
+
+         
+
+              // Feedback Message
+              Positioned(
+                bottom: 120,
+                left: 64,
+                child: Text(
+                  feedbackMessage, // แสดงข้อความเช็คคำตอบ
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: feedbackMessage == 'คำตอบถูกต้อง!' ? Colors.green : Colors.red,
                   ),
                 ),
               ),
@@ -227,13 +257,63 @@ class _CodiaPageState06 extends State<CodiaPage06> {
           ),
         ),
         onPressed: () {
-          // Action for animal button
+          setState(() {
+            selectedWords.add(label); // เพิ่มคำที่เลือกเข้าไปในลิสต์
+            if (selectedWords.length == 5) {
+              // ตรวจสอบคำตอบเมื่อเลือกครบ 5 คำ
+              _checkAnswer();
+            }
+          });
         },
         child: Text(
           label,
           style: const TextStyle(fontSize: 18, color: Colors.white),
         ),
       ),
+    );
+  }
+
+  // ฟังก์ชันตรวจสอบคำตอบ
+  void _checkAnswer() {
+    if (selectedWords.length == 5) {
+      if (ListEquality().equals(selectedWords, correctAnswers)) {
+        setState(() {
+          feedbackMessage = 'คำตอบถูกต้อง!';
+        });
+        _showDialog('คำตอบถูกต้อง!', Colors.green);
+      } else {
+        setState(() {
+          feedbackMessage = 'คำตอบไม่ถูกต้อง';
+        });
+        _showDialog('คำตอบไม่ถูกต้อง', Colors.red);
+      }
+      // รีเซ็ตคำตอบหลังจากเช็ค
+      Future.delayed(const Duration(seconds: 2), () {
+        setState(() {
+          selectedWords.clear(); // เคลียร์คำที่เลือก
+          feedbackMessage = ''; // รีเซ็ตข้อความ
+        });
+      });
+    }
+  }
+
+  // ฟังก์ชันแสดงการแจ้งเตือน
+  void _showDialog(String message, Color color) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(message, style: TextStyle(color: color)),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('ปิด'),
+              onPressed: () {
+                Navigator.of(context).pop(); // ปิด dialog
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:codia_demo_flutter/codia_page.dart';
-import 'package:codia_demo_flutter/codia_page15.dart';
+import 'package:codia_demo_flutter/codia_page18.dart';
 
 class CodiaPage14 extends StatefulWidget {
   const CodiaPage14({super.key});
@@ -248,7 +248,7 @@ class _CodiaPageState14 extends State<CodiaPage14> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const CodiaPage15(), // หน้าถัดไป (CodiaPage07)
+              builder: (context) => const CodiaPage18(), // หน้าถัดไป (CodiaPage07)
             ),
           );
         }
