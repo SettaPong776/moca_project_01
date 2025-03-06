@@ -231,7 +231,7 @@ class _CodiaPageState13 extends State<CodiaPage13> {
                   ),
                   child: const Center(
                     child: Text(
-                      'จงวาดภาพตามแบบรูปภาพที่สุ่มขึ้นมาให้เหมือนที่สุด',
+                      'จงฟังข้อความเสียงและเลือกกลุ่มคำตามข้อความเสียงให้ถูกต้อง',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 24,
