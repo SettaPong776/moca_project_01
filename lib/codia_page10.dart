@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:codia_demo_flutter/codia_page.dart';
 import 'package:codia_demo_flutter/codia_page11.dart';
+import 'dart:async';
+import 'dart:math';
 
 class CodiaPage10 extends StatefulWidget {
   const CodiaPage10({super.key});
@@ -10,7 +12,52 @@ class CodiaPage10 extends StatefulWidget {
 }
 
 class _CodiaPageState10 extends State<CodiaPage10> {
-   @override
+  int displayedNumber = 0;
+  int score = 0;
+  late Timer timer;
+  int remainingTime = 60; // 1 minute
+  Random random = Random();
+  bool gameOver = false;
+
+  @override
+  void initState() {
+    super.initState();
+    startTimer();
+  }
+
+  // Start a 1-minute timer and update the number every second
+  void startTimer() {
+    timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
+      if (remainingTime > 0) {
+        setState(() {
+          remainingTime--;
+          displayedNumber = random.nextInt(2); // Generates 0 or 1
+        });
+      } else {
+        setState(() {
+          gameOver = true;
+          timer.cancel(); // Stop the timer after 1 minute
+        });
+      }
+    });
+  }
+
+  // Function to handle button press
+  void onButtonPressed() {
+    if (!gameOver && displayedNumber == 1) {
+      setState(() {
+        score++;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
@@ -97,33 +144,40 @@ class _CodiaPageState10 extends State<CodiaPage10> {
                   ),
                   child: Column(
                     children: [
-                      
+                      // Display Timer
                       const SizedBox(height: 5),
-                     // Display Numbers
-                      const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 16.0),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Text('00:30',
-                                style: TextStyle(
-                                    fontSize: 36, fontWeight: FontWeight.bold)),  
+                            Text(
+                              '00:${remainingTime < 10 ? '0' : ''}$remainingTime',
+                              style: const TextStyle(
+                                  fontSize: 36, fontWeight: FontWeight.bold),
+                            ),
                           ],
                         ),
                       ),
                       const SizedBox(height: 30),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 16.0),
+
+                      // Display Random Number
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Text('1',
-                                style: TextStyle(
-                                    fontSize: 36, fontWeight: FontWeight.bold)),  
+                            Text(
+                              '$displayedNumber',
+                              style: const TextStyle(
+                                  fontSize: 36, fontWeight: FontWeight.bold),
+                            ),
                           ],
                         ),
                       ),
                       const SizedBox(height: 80),
+
+                      // Red Button
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.red,
@@ -133,13 +187,19 @@ class _CodiaPageState10 extends State<CodiaPage10> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 50, vertical: 26),
                         ),
-                        onPressed: () {
-                          // Action for the delete button
-                        },
+                        onPressed: onButtonPressed,
                         child: const Text(
                           'คลิก',
                           style: TextStyle(fontSize: 30, color: Colors.white),
                         ),
+                      ),
+
+                      // Show score
+                      const SizedBox(height: 30),
+                      Text(
+                        'Score: $score',
+                        style: const TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
@@ -175,46 +235,40 @@ class _CodiaPageState10 extends State<CodiaPage10> {
     );
   }
 
-  
-
-
-
- // Widget สำหรับปุ่ม Footer
-Widget _buildFooterButton(String text, Color color) {
-  return ElevatedButton(
-    style: ElevatedButton.styleFrom(
-      backgroundColor: color,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(19),
+  // Widget for Footer Buttons
+  Widget _buildFooterButton(String text, Color color) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: color,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(19),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 16),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 16),
-    ),
-    onPressed: () {
-      if (text == 'ออก') {
-        // หากกดปุ่ม 'ออก' กลับไปหน้าหลัก
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const CodiaPage(), // หน้าหลัก (CodiaPage01)
-          ),
-        );
-      } else if (text == 'ข้อต่อไป') {
-        // หากกดปุ่ม 'ข้อต่อไป' ไปยังหน้าถัดไป
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const CodiaPage11(), // หน้าถัดไป (CodiaPage04)
-          ),
-        );
-      }
-    },
-    child: Text(
-      text,
-      style: const TextStyle(
-        fontSize: 20,
-        color: Colors.white,
+      onPressed: () {
+        if (text == 'ออก') {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const CodiaPage(), // Go to main page
+            ),
+          );
+        } else if (text == 'ข้อต่อไป') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const CodiaPage11(), // Go to next page
+            ),
+          );
+        }
+      },
+      child: Text(
+        text,
+        style: const TextStyle(
+          fontSize: 20,
+          color: Colors.white,
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 }
