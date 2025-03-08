@@ -190,6 +190,20 @@ class _CodiaPage01 extends State<CodiaPage01> {
                                       const Text('หญิง'),
                                     ],
                                   ),
+                                  Row(
+                                    children: [
+                                      Radio(
+                                        value: "LGBTQ+",
+                                        groupValue: selectedGender,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            selectedGender = value!;
+                                          });
+                                        },
+                                      ),
+                                      const Text('LGBTQ+'),
+                                    ],
+                                  ),
                                 ],
                               ),
                             ],

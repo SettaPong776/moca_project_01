@@ -94,6 +94,38 @@ class _CodiaPageState08 extends State<CodiaPage08> {
     );
   }
 
+  Widget _buildFooterButton(String text, Color color) {
+    return SizedBox(
+      width: 150,  // Adjust the width
+      height: 60,  // Adjust the height
+      child: ElevatedButton(
+        onPressed: () {
+          if (text == 'ออก') {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const CodiaPage()),
+            );
+          } else if (text == 'ข้อต่อไป') {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const CodiaPage09()),
+            );
+          }
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: color,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(19),
+          ),
+        ),
+        child: Text(
+          text,
+          style: TextStyle(fontSize: 24, color: Colors.white),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -137,7 +169,35 @@ class _CodiaPageState08 extends State<CodiaPage08> {
               ),
             ),
           ),
-
+          // Instruction Section
+          Positioned(
+            top: 160,
+            left: 64,
+            right: 64,
+            child: Column(
+              children: [
+                const SizedBox(height: 16),
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: const Color(0xff14967f),
+                    borderRadius: BorderRadius.circular(57),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      'จงฟังเสียงอ่านชุดตัวเลขและเลือกตัวเลขตามลำดับที่ได้ยิน',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -152,7 +212,6 @@ class _CodiaPageState08 extends State<CodiaPage08> {
                   style: TextStyle(fontSize: 24, color: Colors.blue),
                 ),
                 SizedBox(height: 20),
-
                 Column(
                   children: [
                     Row(
@@ -203,12 +262,12 @@ class _CodiaPageState08 extends State<CodiaPage08> {
               ],
             ),
           ),
-
+          // Footer Section
           Positioned(
             bottom: 0,
             child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: 100,
+              width: 1366,  // Set the width to 1366 as per your request
+              height: 161,  // Set the height to 161 as per your request
               decoration: const BoxDecoration(
                 color: Color(0xff14967f),
                 borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
@@ -217,18 +276,8 @@ class _CodiaPageState08 extends State<CodiaPage08> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _buildButton('ออก', Colors.red, () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => const CodiaPage()),
-                    );
-                  }),
-                  _buildButton('ข้อต่อไป', Colors.purple, () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const CodiaPage09()),
-                    );
-                  }),
+                  _buildFooterButton('ออก', Colors.red),  // Custom button method
+                  _buildFooterButton('ข้อต่อไป', Colors.purple),
                 ],
               ),
             ),

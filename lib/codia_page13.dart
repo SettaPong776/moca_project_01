@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; 
 import 'package:codia_demo_flutter/codia_page.dart';
 import 'package:codia_demo_flutter/codia_page14.dart';
 import 'dart:math'; // สำหรับสุ่มคำถาม
@@ -128,18 +128,24 @@ class _CodiaPageState13 extends State<CodiaPage13> {
   // ตัวแปรเก็บประโยคที่สุ่ม
   String currentQuestionKey = '';
 
-  // ฟังก์ชันสำหรับสุ่มคำถามและช้อยส์
+  // สร้างตัวแปรเก็บคำในลำดับที่สุ่ม
+  List<String> shuffledChoices = [];
+
+  // ฟังก์ชันสำหรับสุ่มคำถาม
   void randomizeQuestion() {
     var random = Random();
     List<String> keys = wordMap.keys.toList();
     currentQuestionKey = keys[random.nextInt(keys.length)];
+
+    // เก็บคำในลำดับที่สุ่ม
+    shuffledChoices = List.from(wordMap[currentQuestionKey]!); 
+    shuffledChoices.shuffle();  // สลับคำใน shuffledChoices ตอนเริ่มต้นเท่านั้น
   }
 
   // ฟังก์ชันสำหรับตรวจคำตอบ
   bool checkAnswer() {
     List<String> correctAnswer = List.from(wordMap[currentQuestionKey]!);
-    return ListEquality().equals(userAnswer,
-        correctAnswer); // ใช้ ListEquality เพื่อตรวจสอบความเท่ากันของ List
+    return ListEquality().equals(userAnswer, correctAnswer); // ใช้ ListEquality เพื่อตรวจสอบความเท่ากันของ List
   }
 
   // ฟังก์ชันสำหรับลบคำใน list (ลบคำสุดท้าย)
@@ -151,6 +157,27 @@ class _CodiaPageState13 extends State<CodiaPage13> {
     });
   }
 
+  // ฟังก์ชันสำหรับแสดง dialog
+  void _showDialog(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();  // ปิด dialog
+              },
+              child: const Text('ตกลง'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -159,10 +186,6 @@ class _CodiaPageState13 extends State<CodiaPage13> {
 
   @override
   Widget build(BuildContext context) {
-    // สุ่มช้อยส์ให้เปลี่ยนลำดับทุกครั้ง
-    List<String> shuffledChoices = List.from(wordMap[currentQuestionKey]!);
-    shuffledChoices.shuffle();
-
     return Scaffold(
       body: Center(
         child: Container(
@@ -234,7 +257,7 @@ class _CodiaPageState13 extends State<CodiaPage13> {
                       'จงฟังข้อความเสียงและเลือกกลุ่มคำตามข้อความเสียงให้ถูกต้อง',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 24, // ปรับขนาดฟอนต์ใหญ่ขึ้น
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
@@ -261,10 +284,16 @@ class _CodiaPageState13 extends State<CodiaPage13> {
                       Text(
                         'คำถาม: $currentQuestionKey',
                         style: const TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
+                            fontSize: 24, fontWeight: FontWeight.bold), // ปรับขนาดฟอนต์
                       ),
                       const SizedBox(height: 16),
-                      // แสดงคำช้อยส์ที่สลับ
+                      // แสดงคำที่เลือกเรียง
+                      Text(
+                        'คำที่เลือก: ${userAnswer.join(' ')}',
+                        style: const TextStyle(fontSize: 24), // ปรับขนาดฟอนต์
+                      ),
+                      const SizedBox(height: 16),
+                      // แสดงคำช้อยส์ที่สุ่มตำแหน่งในตอนเริ่มต้น
                       Wrap(
                         spacing: 8.0,
                         runSpacing: 8.0,
@@ -281,26 +310,32 @@ class _CodiaPageState13 extends State<CodiaPage13> {
                                 userAnswer.add(word);
                               });
                             },
-                            child: Text(word),
+                            child: Text(
+                              word,
+                              style: const TextStyle(
+                                fontSize: 24, // ปรับขนาดฟอนต์ให้ใหญ่ขึ้น
+                              ),
+                            ),
                           );
                         }).toList(),
                       ),
-                      const SizedBox(height: 16),
-                      // แสดงคำที่เลือกเรียง
-                      Text(
-                        'คำที่เลือก: ${userAnswer.join(' ')}',
-                        style: const TextStyle(fontSize: 18),
-                      ),
+                      
+
                       const SizedBox(height: 16),
                       // ปุ่มลบคำสุดท้ายจาก list
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor:
-                              Colors.blueAccent, // ตั้งสีปุ่มเป็นสีม่วง
+                              const Color.fromARGB(255, 255, 10, 10), // ตั้งสีปุ่มเป็นสีฟ้า
                           foregroundColor: Colors.white,
                         ),
                         onPressed: removeLastWord,
-                        child: const Text('ลบคำสุดท้าย'),
+                        child: const Text(
+                          'ลบคำล่าสุด',
+                          style: TextStyle(
+                            fontSize: 24, // ปรับขนาดฟอนต์ให้ใหญ่ขึ้น
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -351,31 +386,36 @@ class _CodiaPageState13 extends State<CodiaPage13> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => const CodiaPage(), // หน้าหลัก (CodiaPage01)
+              builder: (context) => const CodiaPage(),
             ),
           );
         } else if (text == 'ข้อต่อไป') {
-          // หากกดปุ่ม 'ข้อต่อไป' ไปยังหน้าถัดไป
-          // ตรวจสอบคำตอบก่อน
+          // หากกดปุ่ม 'ข้อต่อไป'
           bool isCorrect = checkAnswer();
-
-          // พิมพ์ผลลัพธ์ใน console ว่าคำตอบถูกต้องหรือไม่
           print("คำตอบที่เลือก: ${userAnswer.join(' ')}");
           print(isCorrect ? "คำตอบถูกต้อง!" : "คำตอบผิด!");
 
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  const CodiaPage14(), // หน้าถัดไป (CodiaPage04)
-            ),
+          // แสดง dialog
+          _showDialog(
+            "บันทึกคำตอบแล้ว", 
+            "กรุณากดปุ่ม 'ข้อต่อไป' เพื่อทำแบบทดสอบข้อต่อไป 🎉"
           );
+
+          // รอให้ Dialog ปิดแล้วไปยังหน้าถัดไป
+          Future.delayed(const Duration(seconds: 1), () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const CodiaPage14(),
+              ),
+            );
+          });
         }
       },
       child: Text(
         text,
         style: const TextStyle(
-          fontSize: 20,
+          fontSize: 24, // ปรับขนาดฟอนต์ให้ใหญ่ขึ้น
           color: Colors.white,
         ),
       ),

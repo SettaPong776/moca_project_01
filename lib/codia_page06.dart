@@ -1,3 +1,4 @@
+import 'dart:math'; // เพิ่มการใช้งาน Random
 import 'package:flutter/material.dart';
 import 'package:codia_demo_flutter/codia_page.dart';
 import 'package:codia_demo_flutter/codia_page07.dart';
@@ -14,8 +15,45 @@ class _CodiaPageState06 extends State<CodiaPage06> {
   List<String> selectedWords = []; // ตัวแปรเก็บคำที่ผู้ใช้เลือก
   String feedbackMessage = ''; // ตัวแปรเก็บข้อความแสดงผล
 
-  // คำตอบที่ถูกต้อง
-  final List<String> correctAnswers = ['หน้า', 'ผ้าไหม', 'วัด', 'มะลิ', 'สีแดง'];
+  // ชุดคำตอบที่มีให้สุ่ม
+  final List<List<String>> answerSets = [
+    ['หน้า', 'ผ้าไหม', 'วัด', 'มะลิ', 'สีแดง'],
+    ['บ้าน', 'ตา', 'เสือ', 'วิทยุ', 'สีเหลือง'],
+    ['หน้า', 'สีเหลือง', 'เสือ', 'มะลิ', 'หนังสือ'],
+    ['ทีวี', 'บ้าน', 'ผ้าไหม', 'สีแดง', 'มะลิ'],
+    ['วัด', 'ตา', 'หนังสือ', 'วิทยุ', 'บ้าน'],
+    ['หน้า', 'วิทยุ', 'เสือ', 'ผ้าไหม', 'สีเหลือง'],
+    ['ทีวี', 'มะลิ', 'สีแดง', 'เสือ', 'ตา'],
+    ['วัด', 'ผ้าไหม', 'บ้าน', 'หนังสือ', 'สีเหลือง'],
+    ['มะลิ', 'เสือ', 'วิทยุ', 'สีแดง', 'ตา'],
+    ['หน้า', 'สีเหลือง', 'บ้าน', 'วิทยุ', 'ผ้าไหม'],
+    ['ตา', 'เสือ', 'สีแดง', 'มะลิ', 'วัด'],
+    ['หนังสือ', 'ทีวี', 'สีเหลือง', 'บ้าน', 'เสือ'],
+    ['ผ้าไหม', 'มะลิ', 'วิทยุ', 'บ้าน', 'สีแดง'],
+    ['วัด', 'มะลิ', 'สีเหลือง', 'ผ้าไหม', 'ตา'],
+    ['บ้าน', 'เสือ', 'วิทยุ', 'หนังสือ', 'สีแดง'],
+    ['หน้า', 'ทีวี', 'มะลิ', 'เสือ', 'สีเหลือง'],
+    ['วิทยุ', 'หนังสือ', 'ผ้าไหม', 'บ้าน', 'สีแดง'],
+    ['ตา', 'มะลิ', 'เสือ', 'สีเหลือง', 'บ้าน'],
+    ['หน้า', 'บ้าน', 'วิทยุ', 'มะลิ', 'หนังสือ'],
+    ['สีแดง', 'ผ้าไหม', 'เสือ', 'ทีวี', 'วัด']
+  ];
+
+  late List<String> correctAnswers; // คำตอบที่สุ่มได้
+
+  @override
+  void initState() {
+    super.initState();
+    _randomizeAnswers(); // สุ่มชุดคำตอบเมื่อหน้าถูกโหลด
+  }
+
+  // ฟังก์ชันสุ่มชุดคำตอบ
+  void _randomizeAnswers() {
+    final random = Random();
+    correctAnswers = answerSets[random.nextInt(answerSets.length)];
+    // เพิ่มคำสั่ง print เพื่อแสดงคำตอบใน Terminal
+    print('ชุดคำตอบที่สุ่มได้: $correctAnswers');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -122,28 +160,26 @@ class _CodiaPageState06 extends State<CodiaPage06> {
                               horizontal: 20, vertical: 10),
                         ),
                       ),
-                      
                       const SizedBox(height: 30),
-                          Positioned(
-                bottom: 80,
-                left: 64,
-                child: Text(
-                  ' ${selectedWords.join('       ')}', // แสดงคำที่เลือกโดยใช้การเว้นวรรค
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
+                      Positioned(
+                        bottom: 80,
+                        left: 64,
+                        child: Text(
+                          ' ${selectedWords.join('       ')}', // แสดงคำที่เลือกโดยใช้การเว้นวรรค
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
                       const SizedBox(height: 60),
-                           // Display selected words
-          
+                      // Display selected words
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: List.generate(
                           4,
-                          (index) => _buildAnimalButton(['หน้า', 'ผ้าไหม', 'วัด', 'มะลิ'][index]),
+                          (index) => _buildAnimalButton(['หน้า', 'บ้าน', 'วิทยุ', 'ตา'][index]),
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -151,7 +187,7 @@ class _CodiaPageState06 extends State<CodiaPage06> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: List.generate(
                           4,
-                          (index) => _buildAnimalButton(['สีแดง', 'เสือ', 'บ้าน', 'หนังสือ'][index]),
+                          (index) => _buildAnimalButton(['สีแดง', 'เสือ', 'ผ้าไหม', 'หนังสือ'][index]),
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -159,7 +195,7 @@ class _CodiaPageState06 extends State<CodiaPage06> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: List.generate(
                           4,
-                          (index) => _buildAnimalButton(['ทีวี', 'ตา', 'สีเหลือง', 'วิทยุ'][index]),
+                          (index) => _buildAnimalButton(['ทีวี', 'มะลิ', 'สีเหลือง', 'วัด'][index]),
                         ),
                       ),
                       const SizedBox(height: 30),
@@ -188,8 +224,6 @@ class _CodiaPageState06 extends State<CodiaPage06> {
                   ),
                 ),
               ),
-
-         
 
               // Feedback Message
               Positioned(

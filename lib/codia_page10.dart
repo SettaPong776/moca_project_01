@@ -18,6 +18,7 @@ class _CodiaPageState10 extends State<CodiaPage10> {
   int remainingTime = 60; // 1 minute
   Random random = Random();
   bool gameOver = false;
+  int lastDisplayedNumber = -1;  // ใช้เก็บเลขที่แสดงล่าสุด
 
   @override
   void initState() {
@@ -31,7 +32,20 @@ class _CodiaPageState10 extends State<CodiaPage10> {
       if (remainingTime > 0) {
         setState(() {
           remainingTime--;
-          displayedNumber = random.nextInt(2); // Generates 0 or 1
+
+          // ให้เลข 1 มีโอกาสออกมากกว่าเลขอื่น ๆ แต่ไม่ให้เลข 1 ซ้ำติดกัน
+          if (random.nextDouble() < 0.5) {  // 50% ให้เลข 1 ออก
+            if (lastDisplayedNumber != 1) {
+              displayedNumber = 1;
+            } else {
+              displayedNumber = random.nextInt(9) + 1; // สุ่มเลขจาก 2 ถึง 9
+            }
+          } else {
+            displayedNumber = random.nextInt(9) + 1; // สุ่มเลขจาก 2 ถึง 9
+          }
+
+          // เก็บเลขล่าสุดที่แสดง
+          lastDisplayedNumber = displayedNumber;
         });
       } else {
         setState(() {
@@ -189,7 +203,7 @@ class _CodiaPageState10 extends State<CodiaPage10> {
                         ),
                         onPressed: onButtonPressed,
                         child: const Text(
-                          'คลิก',
+                          'แตะ',
                           style: TextStyle(fontSize: 30, color: Colors.white),
                         ),
                       ),
@@ -197,7 +211,7 @@ class _CodiaPageState10 extends State<CodiaPage10> {
                       // Show score
                       const SizedBox(height: 30),
                       Text(
-                        'Score: $score',
+                        'จำนวนที่ทำได้: $score',
                         style: const TextStyle(
                             fontSize: 24, fontWeight: FontWeight.bold),
                       ),

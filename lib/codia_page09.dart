@@ -144,7 +144,35 @@ class _CodiaPageState09 extends State<CodiaPage09> {
               ),
             ),
           ),
-
+          // Instruction Section
+              Positioned(
+                top: 160,
+                left: 64,
+                right: 64,
+                child: Column(
+                  children: [
+                    const SizedBox(height: 16),
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: const Color(0xff14967f),
+                        borderRadius: BorderRadius.circular(57),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          'จงฟังเสียงอ่านชุดตัวเลขและเลือกตัวเลขแบบย้อนลำดับจากที่ได้ยิน',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 24,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -211,35 +239,39 @@ class _CodiaPageState09 extends State<CodiaPage09> {
             ),
           ),
 
-          Positioned(
-            bottom: 0,
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: 100,
-              decoration: const BoxDecoration(
-                color: Color(0xff14967f),
-                borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 64, vertical: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _buildButton('ออก', Colors.red, () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => const CodiaPage()),
-                    );
-                  }),
-                  _buildButton('ข้อต่อไป', Colors.purple, () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const CodiaPage10()),
-                    );
-                  }),
-                ],
-              ),
-            ),
-          ),
+           Positioned(
+  bottom: 0,
+  child: Container(
+    width: MediaQuery.of(context).size.width,
+    height: 100,
+    decoration: const BoxDecoration(
+      color: Color(0xff14967f),
+      borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+    ),
+    padding: const EdgeInsets.symmetric(horizontal: 64, vertical: 20),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        _buildButton('ออก', Colors.red, () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const CodiaPage()),
+          );
+        }),
+        // Adjusted width for "ข้อต่อไป" button
+        Container(
+          width: 150,  // Increased width
+          child: _buildButton('ข้อต่อไป', Colors.purple, () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const CodiaPage10()),
+            );
+          }),
+        ),
+      ],
+    ),
+  ),
+),
         ],
       ),
     );

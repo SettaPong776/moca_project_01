@@ -12,17 +12,17 @@ class CodiaPage12 extends StatefulWidget {
 class _CodiaPageState12 extends State<CodiaPage12> {
   int incorrectGuesses = 0;
   bool buttonsDisabled = false;
-  String feedbackMessage = ''; // ตัวแปรเพื่อเก็บข้อความ feedback
+  String feedbackMessage = ''; // Variable to store feedback message
 
   // Correct answer
   final List<String> correctAnswer = [
-    'หน้า ผ้าไหม วัด มะลิ สีแดง', // คำตอบที่ถูกต้องเป็นลำดับนี้
+    'หน้า ผ้าไหม วัด มะลิ สีแดง', // Correct answer in this order
   ];
 
-  // List of options (ปุ่มทั้งหมด)
+  // List of options (all buttons)
   final List<String> options = [
     'มะลิ หน้า วิทยุ สีแดง ผ้าไหม',
-    'หน้า ผ้าไหม วัด มะลิ สีแดง', // คำตอบที่ถูกต้อง
+    'หน้า ผ้าไหม วัด มะลิ สีแดง', // Correct answer
     'สีเหลือง หน้า ผ้าไหม วัด มะลิ',
     'ทีวี ตา วัด ผ้าไหม สีแดง',
     'เสื้อ บ้าน หนังสือ วัด ผ้าไหม',
@@ -36,7 +36,7 @@ class _CodiaPageState12 extends State<CodiaPage12> {
           width: 1366,
           height: 1024,
           decoration: const BoxDecoration(
-            color: Color(0xffe5f5f8), // พื้นหลังสีฟ้าอ่อน
+            color: Color(0xffe5f5f8), // Light blue background
           ),
           child: Stack(
             children: [
@@ -159,7 +159,7 @@ class _CodiaPageState12 extends State<CodiaPage12> {
                           feedbackMessage,
                           style: TextStyle(
                             fontSize: 22,
-                            color: feedbackMessage == 'ถูกต้อง'
+                            color: feedbackMessage == ''
                                 ? Colors.green
                                 : Colors.red,
                           ),
@@ -199,50 +199,73 @@ class _CodiaPageState12 extends State<CodiaPage12> {
     );
   }
 
-  // Widget สำหรับปุ่มคำตอบ
-  Widget _buildAnimalButton(String label) {
-    return SizedBox(
-      width: 350,
-      height: 60,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color.fromARGB(255, 61, 122, 253),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(19),
-          ),
-        ),
-        onPressed: buttonsDisabled
-            ? null
-            : () {
-                if (incorrectGuesses < 2) {
-                  if (label == correctAnswer[0]) {
-                    setState(() {
-                      feedbackMessage = 'ถูกต้อง'; // แสดงข้อความถูกต้อง
-                      buttonsDisabled = true; // ปิดการใช้งานปุ่มทั้งหมด
-                    });
-                  } else {
-                    setState(() {
-                      incorrectGuesses++;
-                      feedbackMessage = 'คำตอบผิด'; // แสดงข้อความคำตอบผิด
-                    });
-                  }
-
-                  if (incorrectGuesses >= 2) {
-                    setState(() {
-                      buttonsDisabled = true;
-                    });
-                  }
-                }
-              },
-        child: Text(
-          label,
-          style: const TextStyle(fontSize: 22, color: Colors.white),
+  // Widget for the answer buttons
+Widget _buildAnimalButton(String label) {
+  return SizedBox(
+    width: 350,
+    height: 60,
+    child: ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color.fromARGB(255, 61, 122, 253),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(19),
         ),
       ),
+      onPressed: buttonsDisabled
+          ? null
+          : () {
+              if (incorrectGuesses < 2) {
+                if (label == correctAnswer[0]) {
+                  _showDialog("บันทึกคำตอบแล้ว", "กรุณากดปุ่ม \"ข้อต่อไป\" เพื่อทำแบบทดสอบข้อต่อไป🎉");
+                  setState(() {
+                    feedbackMessage = ''; // Correct answer message
+                    buttonsDisabled = true; // Disable all buttons
+                  });
+                } else {
+                  setState(() {
+                    incorrectGuesses++;
+                    feedbackMessage = ''; // Incorrect answer message
+                  });
+
+                  // Check if incorrect guesses have reached 2
+                  if (incorrectGuesses >= 2) {
+                    // Show dialog after 2 incorrect guesses
+                    _showDialog("บันทึกคำตอบแล้ว", "กรุณากดปุ่ม \"ข้อต่อไป\" เพื่อทำแบบทดสอบข้อต่อไป🎉");
+                  }
+                }
+              }
+            },
+      child: Text(
+        label,
+        style: const TextStyle(fontSize: 22, color: Colors.white),
+      ),
+    ),
+  );
+}
+
+
+  // Function to show dialog
+  void _showDialog(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('ตกลง'),
+            ),
+          ],
+        );
+      },
     );
   }
 
-  // Widget สำหรับปุ่ม Footer
+  // Widget for Footer buttons
   Widget _buildFooterButton(String text, Color color) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
