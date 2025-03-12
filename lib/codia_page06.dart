@@ -1,7 +1,9 @@
 import 'dart:math'; // เพิ่มการใช้งาน Random
-import 'package:flutter/material.dart';
 import 'package:codia_demo_flutter/codia_page.dart';
-import 'package:codia_demo_flutter/codia_page07.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'correct_answer_provider.dart'; // นำเข้า CorrectAnswerProvider
+import 'codia_page07.dart';
 import 'package:collection/collection.dart';
 
 class CodiaPage06 extends StatefulWidget {
@@ -51,8 +53,9 @@ class _CodiaPageState06 extends State<CodiaPage06> {
   void _randomizeAnswers() {
     final random = Random();
     correctAnswers = answerSets[random.nextInt(answerSets.length)];
-    // เพิ่มคำสั่ง print เพื่อแสดงคำตอบใน Terminal
-    print('ชุดคำตอบที่สุ่มได้: $correctAnswers');
+    // ใช้ Provider เพื่อส่งข้อมูล correctAnswer ไปยัง CodiaPage07 และ CodiaPage12
+    Provider.of<CorrectAnswerProvider>(context, listen: false)
+        .updateCorrectAnswer(correctAnswers);
   }
 
   @override
@@ -114,7 +117,7 @@ class _CodiaPageState06 extends State<CodiaPage06> {
                       ),
                       child: const Center(
                         child: Text(
-                          'จงฟังเสียงอ่านคำทดสอบ 5 คำ \n และให้ผู้ทดสอบเลือกตามลำดับคำอ่านที่ได้ยิน ',
+                          'จงฟังเสียงอ่านคำทดสอบ 5 คำ \n และให้ผู้ทดสอบเลือกตามลำดับคำอ่านที่ได้ยิน',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 24,
@@ -160,26 +163,31 @@ class _CodiaPageState06 extends State<CodiaPage06> {
                               horizontal: 20, vertical: 10),
                         ),
                       ),
-                      const SizedBox(height: 30),
-                      Positioned(
-                        bottom: 80,
-                        left: 64,
-                        child: Text(
-                          ' ${selectedWords.join('       ')}', // แสดงคำที่เลือกโดยใช้การเว้นวรรค
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
                       const SizedBox(height: 60),
-                      // Display selected words
+
+                      // Display selected words (Below "ฟังเสียงคำอ่าน" button)
+                      if (selectedWords.isNotEmpty) ...[
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: selectedWords
+                              .map((word) => Chip(
+                                    label: Text(word),
+                                    // backgroundColor: Colors.purple,
+                                    labelStyle: const TextStyle(
+                                        color: Color.fromARGB(255, 0, 0, 0), fontSize: 16),
+                                  ))
+                              .toList(),
+                        ),
+                      ],
+                      const SizedBox(height: 20),
+
+                      // Display answer choices (buttons for word selection)
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: List.generate(
                           4,
-                          (index) => _buildAnimalButton(['หน้า', 'บ้าน', 'วิทยุ', 'ตา'][index]),
+                              (index) => _buildAnimalButton(['หน้า', 'ผ้าไหม', 'วัด', 'มะลิ'][index]),
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -187,7 +195,7 @@ class _CodiaPageState06 extends State<CodiaPage06> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: List.generate(
                           4,
-                          (index) => _buildAnimalButton(['สีแดง', 'เสือ', 'ผ้าไหม', 'หนังสือ'][index]),
+                              (index) => _buildAnimalButton(['สีแดง', 'เสือ', 'บ้าน', 'หนังสือ'][index]),
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -195,10 +203,11 @@ class _CodiaPageState06 extends State<CodiaPage06> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: List.generate(
                           4,
-                          (index) => _buildAnimalButton(['ทีวี', 'มะลิ', 'สีเหลือง', 'วัด'][index]),
+                              (index) => _buildAnimalButton(['ทีวี', 'ตา', 'สีเหลือง', 'วิทยุ'][index]),
                         ),
                       ),
                       const SizedBox(height: 30),
+
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.red,
@@ -248,10 +257,10 @@ class _CodiaPageState06 extends State<CodiaPage06> {
                   decoration: const BoxDecoration(
                     color: Color(0xff14967f),
                     borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(30)),
+                    BorderRadius.vertical(top: Radius.circular(30)),
                   ),
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 64, vertical: 20),
+                  const EdgeInsets.symmetric(horizontal: 64, vertical: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -269,16 +278,6 @@ class _CodiaPageState06 extends State<CodiaPage06> {
   }
 
   // Widget สำหรับปุ่มคำตอบ
-  Widget _buildCategoryLabel(String label) {
-    return Text(
-      label,
-      style: const TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.bold,
-      ),
-    );
-  }
-
   Widget _buildAnimalButton(String label) {
     return SizedBox(
       width: 150,
@@ -310,7 +309,8 @@ class _CodiaPageState06 extends State<CodiaPage06> {
   // ฟังก์ชันตรวจสอบคำตอบ
   void _checkAnswer() {
     if (selectedWords.length == 5) {
-      if (ListEquality().equals(selectedWords, correctAnswers)) {
+      final correctAnswer = Provider.of<CorrectAnswerProvider>(context, listen: false).correctAnswer;
+      if (ListEquality().equals(selectedWords, correctAnswer)) {
         setState(() {
           feedbackMessage = 'คำตอบถูกต้อง!';
         });

@@ -1,6 +1,10 @@
-import 'package:flutter/material.dart';
+import 'dart:math';
 import 'package:codia_demo_flutter/codia_page.dart';
-import 'package:codia_demo_flutter/codia_page13.dart';
+import 'package:codia_demo_flutter/codia_page08.dart';
+import 'package:codia_demo_flutter/correct_answer_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart'; // Make sure to import provider
+import 'package:collection/collection.dart';
 
 class CodiaPage12 extends StatefulWidget {
   const CodiaPage12({super.key});
@@ -10,23 +14,105 @@ class CodiaPage12 extends StatefulWidget {
 }
 
 class _CodiaPageState12 extends State<CodiaPage12> {
-  int incorrectGuesses = 0;
-  bool buttonsDisabled = false;
-  String feedbackMessage = ''; // Variable to store feedback message
-
-  // Correct answer
-  final List<String> correctAnswer = [
-    'หน้า ผ้าไหม วัด มะลิ สีแดง', // Correct answer in this order
+  final List<List<String>> answerSets = [
+    ['หน้า', 'ผ้าไหม', 'วัด', 'มะลิ', 'สีแดง'],
+    ['บ้าน', 'ตา', 'เสือ', 'วิทยุ', 'สีเหลือง'],
+    ['หน้า', 'สีเหลือง', 'เสือ', 'มะลิ', 'หนังสือ'],
+    ['ทีวี', 'บ้าน', 'ผ้าไหม', 'สีแดง', 'มะลิ'],
+    ['วัด', 'ตา', 'หนังสือ', 'วิทยุ', 'บ้าน'],
+    ['หน้า', 'วิทยุ', 'เสือ', 'ผ้าไหม', 'สีเหลือง'],
+    ['ทีวี', 'มะลิ', 'สีแดง', 'เสือ', 'ตา'],
+    ['วัด', 'ผ้าไหม', 'บ้าน', 'หนังสือ', 'สีเหลือง'],
+    ['มะลิ', 'เสือ', 'วิทยุ', 'สีแดง', 'ตา'],
+    ['หน้า', 'สีเหลือง', 'บ้าน', 'วิทยุ', 'ผ้าไหม'],
+    ['ตา', 'เสือ', 'สีแดง', 'มะลิ', 'วัด'],
+    ['หนังสือ', 'ทีวี', 'สีเหลือง', 'บ้าน', 'เสือ'],
+    ['ผ้าไหม', 'มะลิ', 'วิทยุ', 'บ้าน', 'สีแดง'],
+    ['วัด', 'มะลิ', 'สีเหลือง', 'ผ้าไหม', 'ตา'],
+    ['บ้าน', 'เสือ', 'วิทยุ', 'หนังสือ', 'สีแดง'],
+    ['หน้า', 'ทีวี', 'มะลิ', 'เสือ', 'สีเหลือง'],
+    ['วิทยุ', 'หนังสือ', 'ผ้าไหม', 'บ้าน', 'สีแดง'],
+    ['ตา', 'มะลิ', 'เสือ', 'สีเหลือง', 'บ้าน'],
+    ['หน้า', 'บ้าน', 'วิทยุ', 'มะลิ', 'หนังสือ'],
+    ['สีแดง', 'ผ้าไหม', 'เสือ', 'ทีวี', 'วัด']
   ];
 
-  // List of options (all buttons)
-  final List<String> options = [
-    'มะลิ หน้า วิทยุ สีแดง ผ้าไหม',
-    'หน้า ผ้าไหม วัด มะลิ สีแดง', // Correct answer
-    'สีเหลือง หน้า ผ้าไหม วัด มะลิ',
-    'ทีวี ตา วัด ผ้าไหม สีแดง',
-    'เสื้อ บ้าน หนังสือ วัด ผ้าไหม',
-  ];
+  List<List<String>> selectedAnswers = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _selectRandomAnswers();
+  }
+
+  // Select random answers but always include the correct answer
+  void _selectRandomAnswers() {
+    Random random = Random();
+    final correctAnswer = Provider.of<CorrectAnswerProvider>(context, listen: false).correctAnswer;
+
+    // Ensure the correct answer is in the randomly selected answers
+    selectedAnswers = List.generate(4, (index) {
+      return answerSets[random.nextInt(answerSets.length)];
+    });
+
+    // Insert the correct answer randomly into the selected answers
+    selectedAnswers.insert(random.nextInt(selectedAnswers.length + 1), correctAnswer);
+
+    setState(() {print(correctAnswer);});
+  }
+
+  // Check if the selected answer matches the correct one from the provider
+  void _checkAnswer(List<String> selectedAnswer) {
+    final correctAnswer = Provider.of<CorrectAnswerProvider>(context, listen: false).correctAnswer;
+
+    // Sort both lists before comparing to ignore order
+    if (ListEquality().equals(List.from(selectedAnswer)..sort(), List.from(correctAnswer)..sort())) {
+      print('ถูกต้อง');  // Correct answer
+    } else {
+      print('ผิด');  // Incorrect answer
+    }
+    print(correctAnswer);
+    print(selectedAnswer);
+  }
+
+  // Widget for footer button
+  Widget _buildFooterButton(String text, Color color) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: color,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(19),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 16),
+      ),
+      onPressed: () {
+        if (text == 'ออก') {
+          // Navigate to the main page when "ออก" button is pressed
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const CodiaPage(), // Navigate to main page (CodiaPage)
+            ),
+          );
+        } else if (text == 'ข้อต่อไป') {
+          // Navigate to the next page when "ข้อต่อไป" button is pressed
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const CodiaPage08(), // Navigate to next page (CodiaPage08)
+            ),
+          );
+        }
+      },
+      child: Text(
+        text,
+        style: const TextStyle(
+          fontSize: 20,
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,11 +122,10 @@ class _CodiaPageState12 extends State<CodiaPage12> {
           width: 1366,
           height: 1024,
           decoration: const BoxDecoration(
-            color: Color(0xffe5f5f8), // Light blue background
+            color: Color(0xffe5f5f8),
           ),
           child: Stack(
             children: [
-              // Header Section
               Positioned(
                 top: 0,
                 child: Container(
@@ -66,25 +151,10 @@ class _CodiaPageState12 extends State<CodiaPage12> {
                           ),
                         ),
                       ),
-                       const Icon(
-                        Icons.volume_up,
-                        color: Colors.white,
-                        size: 36,
-                      ),
-                      const SizedBox(width: 8),
-                      const Text(
-                        'ฟังเสียง',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white,
-                        ),
-                      ),
                     ],
                   ),
                 ),
               ),
-
-              // Instruction Section
               Positioned(
                 top: 160,
                 left: 64,
@@ -100,7 +170,7 @@ class _CodiaPageState12 extends State<CodiaPage12> {
                       ),
                       child: const Center(
                         child: Text(
-                          'จงเลือกคำให้ถูกต้องตามลำดับคำอ่านที่ได้ยินจากครั้งที่แล้ว',
+                          'เลือกประโยคที่ตรงกับข้อก่อนหน้า',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 24,
@@ -113,10 +183,8 @@ class _CodiaPageState12 extends State<CodiaPage12> {
                   ],
                 ),
               ),
-
-              // Main Content Section
               Positioned(
-                top: 310,
+                top: 280,
                 left: 64,
                 right: 64,
                 child: Container(
@@ -128,61 +196,45 @@ class _CodiaPageState12 extends State<CodiaPage12> {
                   ),
                   child: Column(
                     children: [
-                      const SizedBox(height: 20),
-                      // Answer options
-                      ...List.generate(options.length, (index) {
-                        return Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                _buildAnimalButton(options[index]),
-                              ],
+                      const SizedBox(height: 60),
+                      // Display selected answers as buttons
+                      ...selectedAnswers.map((answerSet) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              _checkAnswer(answerSet); // Check answer when button is pressed
+                            },
+                            child: Text(
+                              answerSet.join(', '),
+                              style: const TextStyle(color: Colors.white), // Change text color to white
                             ),
-                            const SizedBox(height: 16),
-                          ],
-                        );
-                      }),
-
-                      const SizedBox(height: 16),
-
-                      // Incorrect guesses display
-                      Text(
-                        'จำนวนที่ทายผิด: $incorrectGuesses/2',
-                        style: const TextStyle(fontSize: 18, color: Colors.red),
-                      ),
-                      const SizedBox(height: 16),
-
-                      // Feedback message (ถูกหรือผิด)
-                      if (feedbackMessage.isNotEmpty)
-                        Text(
-                          feedbackMessage,
-                          style: TextStyle(
-                            fontSize: 22,
-                            color: feedbackMessage == ''
-                                ? Colors.green
-                                : Colors.red,
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(19),
+                              ),
+                              backgroundColor: Colors.purple,
+                            ),
                           ),
-                        ),
+                        );
+                      }).toList(),
                       const SizedBox(height: 30),
                     ],
                   ),
                 ),
               ),
-
               // Footer Section
               Positioned(
                 bottom: 0,
+                left: 64,
+                right: 64,
                 child: Container(
-                  width: 1366,
-                  height: 161,
-                  decoration: const BoxDecoration(
-                    color: Color(0xff14967f),
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(30)),
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: const Color(0xff14967f),
+                    borderRadius: BorderRadius.circular(30),
                   ),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 64, vertical: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -194,109 +246,6 @@ class _CodiaPageState12 extends State<CodiaPage12> {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  // Widget for the answer buttons
-Widget _buildAnimalButton(String label) {
-  return SizedBox(
-    width: 350,
-    height: 60,
-    child: ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: const Color.fromARGB(255, 61, 122, 253),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(19),
-        ),
-      ),
-      onPressed: buttonsDisabled
-          ? null
-          : () {
-              if (incorrectGuesses < 2) {
-                if (label == correctAnswer[0]) {
-                  _showDialog("บันทึกคำตอบแล้ว", "กรุณากดปุ่ม \"ข้อต่อไป\" เพื่อทำแบบทดสอบข้อต่อไป🎉");
-                  setState(() {
-                    feedbackMessage = ''; // Correct answer message
-                    buttonsDisabled = true; // Disable all buttons
-                  });
-                } else {
-                  setState(() {
-                    incorrectGuesses++;
-                    feedbackMessage = ''; // Incorrect answer message
-                  });
-
-                  // Check if incorrect guesses have reached 2
-                  if (incorrectGuesses >= 2) {
-                    // Show dialog after 2 incorrect guesses
-                    _showDialog("บันทึกคำตอบแล้ว", "กรุณากดปุ่ม \"ข้อต่อไป\" เพื่อทำแบบทดสอบข้อต่อไป🎉");
-                  }
-                }
-              }
-            },
-      child: Text(
-        label,
-        style: const TextStyle(fontSize: 22, color: Colors.white),
-      ),
-    ),
-  );
-}
-
-
-  // Function to show dialog
-  void _showDialog(String title, String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(title),
-          content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('ตกลง'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  // Widget for Footer buttons
-  Widget _buildFooterButton(String text, Color color) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: color,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(19),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 16),
-      ),
-      onPressed: () {
-        if (text == 'ออก') {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const CodiaPage(),
-            ),
-          );
-        } else if (text == 'ข้อต่อไป') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const CodiaPage13(),
-            ),
-          );
-        }
-      },
-      child: Text(
-        text,
-        style: const TextStyle(
-          fontSize: 20,
-          color: Colors.white,
         ),
       ),
     );
